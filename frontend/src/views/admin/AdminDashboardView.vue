@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrap" v-loading="loading">
-    <div class="section-title">管理台概览</div>
+    <div class="section-title">后台概览</div>
 
     <div class="summary-grid">
       <div class="summary-card">
@@ -8,34 +8,34 @@
         <div class="value">{{ Number(overview.userCount || 0) }}</div>
       </div>
       <div class="summary-card">
-        <div class="label">农业信息条目</div>
+        <div class="label">宠物档案总数</div>
         <div class="value">{{ Number(overview.productCount || 0) }}</div>
       </div>
       <div class="summary-card">
-        <div class="label">平台历史记录</div>
+        <div class="label">跟进记录总数</div>
         <div class="value">{{ Number(overview.orderCount || 0) }}</div>
       </div>
       <div class="summary-card">
-        <div class="label">平台活跃指数</div>
+        <div class="label">平台热度指数</div>
         <div class="value">{{ Number(overview.paidAmount || 0).toFixed(0) }}</div>
       </div>
     </div>
 
     <div class="panel-grid">
       <div class="card panel">
-        <div class="panel-title">改造策略</div>
+        <div class="panel-title">展示策略</div>
         <ul>
-          <li>前台以农业信息浏览、搜索与公告查看为主。</li>
-          <li>后台延续现有信息表结构，映射为作物资料、农业专题和分类条目。</li>
-          <li>购物、支付、发货等页面不再暴露在新系统主流程中。</li>
+          <li>前台以宠物档案浏览、搜索筛选与爱心公告查看为主。</li>
+          <li>后台沿用现有信息结构，映射为宠物资料、领养档案和分类标签维护。</li>
+          <li>历史兼容流程仅作为底层数据适配保留，不再作为当前系统的主展示链路。</li>
         </ul>
       </div>
       <div class="card panel">
         <div class="panel-title">维护入口</div>
         <ul>
-          <li>作物信息：维护重点农业主题、栽培资料与推荐内容。</li>
-          <li>分类管理：维护一级/二级农业分类，继续支持两级联动。</li>
-          <li>公告管理：发布系统公告、农业资讯与平台通知说明。</li>
+          <li>宠物资料：维护萌宠档案、封面配图、关注热度与展示状态。</li>
+          <li>分类管理：维护一级/二级宠物分类，继续支持两级联动。</li>
+          <li>公告管理：发布平台公告、领养提醒和养宠指南内容。</li>
         </ul>
       </div>
     </div>

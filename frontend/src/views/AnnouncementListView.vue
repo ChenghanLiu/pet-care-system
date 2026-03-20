@@ -2,8 +2,8 @@
   <div class="page-wrap">
     <div class="section-head">
       <div>
-        <div class="section-title">系统公告</div>
-        <div class="section-desc">查看平台发布的农业资讯、管理通知与更新说明。</div>
+        <div class="section-title">爱心公告</div>
+        <div class="section-desc">查看平台发布的领养通知、救助动态、养宠指南与站内更新说明。</div>
       </div>
     </div>
 
@@ -21,7 +21,7 @@
         @keyup.space.prevent="goDetail(item)"
       >
         <div class="notice-meta">
-          <el-tag size="small" effect="plain">{{ item.type === 2 ? '资讯解读' : '系统公告' }}</el-tag>
+          <el-tag size="small" effect="plain">{{ item.type === 2 ? '养宠指南' : '平台公告' }}</el-tag>
           <span>{{ formatTime(item.publishTime || item.createdAt) }}</span>
         </div>
         <h3>{{ item.title || `公告 #${item.id || '-'}` }}</h3>
@@ -31,7 +31,7 @@
     </div>
 
     <div class="card empty-wrap" v-if="!notices.length">
-      <el-empty description="暂无公告信息" />
+      <el-empty description="暂未发布公告内容" />
     </div>
   </div>
 </template>
@@ -49,7 +49,7 @@ const loadError = ref('')
 const formatTime = (value) => value ? dayjs(value).format('YYYY-MM-DD HH:mm') : '-'
 const getSummary = (value) => {
   const text = String(value ?? '').trim()
-  if (!text) return '当前公告暂无摘要信息，点击查看详情。'
+  if (!text) return '当前内容暂无摘要，点击查看详情。'
   return text.length > 88 ? `${text.slice(0, 88)}...` : text
 }
 const goDetail = (item) => {
@@ -96,11 +96,11 @@ onMounted(async () => {
 .notice-card:hover,
 .notice-card:focus-visible {
   transform: translateY(-4px);
-  box-shadow: 0 16px 32px rgba(44, 82, 39, 0.12);
+  box-shadow: 0 16px 32px rgba(45, 91, 102, 0.12);
 }
 
 .notice-card:focus-visible {
-  outline: 2px solid rgba(111, 170, 91, 0.45);
+  outline: 2px solid rgba(255, 138, 101, 0.38);
   outline-offset: 2px;
 }
 

@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrap" v-loading="loading">
-    <div class="section-title">统计概览</div>
+    <div class="section-title">数据看板</div>
 
     <div class="summary-grid">
       <div class="summary-card">
@@ -8,26 +8,26 @@
         <div class="value">{{ Number(overview.userCount || 0) }}</div>
       </div>
       <div class="summary-card">
-        <div class="label">累计商品</div>
+        <div class="label">累计宠物档案</div>
         <div class="value">{{ Number(overview.productCount || 0) }}</div>
       </div>
       <div class="summary-card">
-        <div class="label">累计订单</div>
+        <div class="label">累计跟进记录</div>
         <div class="value">{{ Number(overview.orderCount || 0) }}</div>
       </div>
       <div class="summary-card">
-        <div class="label">累计销售额</div>
-        <div class="value">¥{{ Number(overview.paidAmount || 0).toFixed(2) }}</div>
+        <div class="label">累计互动指数</div>
+        <div class="value">{{ Number(overview.paidAmount || 0).toFixed(2) }}</div>
       </div>
     </div>
 
     <div class="card chart-card">
-      <div class="sub-title">热销商品 TOP10</div>
+      <div class="sub-title">高关注宠物 TOP10</div>
       <div ref="topProductsChartRef" class="chart-box"></div>
     </div>
 
     <div class="card chart-card">
-      <div class="sub-title">分类销售额占比</div>
+      <div class="sub-title">分类活跃度占比</div>
       <div ref="categoryRatioChartRef" class="chart-box"></div>
     </div>
   </div>
@@ -37,6 +37,7 @@
 import * as echarts from 'echarts'
 import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { getAdminCategoryRatio, getAdminOverview, getAdminTopProducts } from '../../api/admin'
+import { mapBusinessText } from '../../utils/agriTransform'
 
 const loading = ref(false)
 const overview = ref({})
@@ -55,11 +56,11 @@ const renderCharts = () => {
       grid: { left: 40, right: 16, top: 24, bottom: 48 },
       xAxis: {
         type: 'category',
-        data: topProducts.value.map((item) => item.productName),
+        data: topProducts.value.map((item) => mapBusinessText(item.productName)),
         axisLabel: { rotate: 20 }
       },
       yAxis: { type: 'value' },
-      series: [{ type: 'bar', data: topProducts.value.map((item) => Number(item.sales || 0)), itemStyle: { color: '#7b1325' } }]
+      series: [{ type: 'bar', data: topProducts.value.map((item) => Number(item.sales || 0)), itemStyle: { color: '#ef7f57' } }]
     })
   }
 
@@ -72,7 +73,7 @@ const renderCharts = () => {
         {
           type: 'pie',
           radius: ['35%', '65%'],
-          data: categoryRatio.value.map((item) => ({ name: item.categoryName, value: Number(item.amount || 0) }))
+          data: categoryRatio.value.map((item) => ({ name: mapBusinessText(item.categoryName), value: Number(item.amount || 0) }))
         }
       ]
     })
@@ -134,7 +135,7 @@ onBeforeUnmount(() => {
   margin-top: 6px;
   font-size: 22px;
   font-weight: 600;
-  color: var(--wine-red);
+  color: var(--brand-main);
 }
 
 .chart-card {

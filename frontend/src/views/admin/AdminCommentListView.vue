@@ -1,14 +1,14 @@
 <template>
   <div class="page-wrap">
-    <div class="section-title">评论管理</div>
+    <div class="section-title">互动反馈管理</div>
     <div class="card" style="padding:16px;">
       <el-table :data="comments" v-loading="loading">
         <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column prop="productId" label="商品ID" width="100" />
+        <el-table-column prop="productId" label="宠物ID" width="100" />
         <el-table-column prop="userId" label="用户ID" width="100" />
-        <el-table-column prop="score" label="评分" width="90" />
-        <el-table-column prop="content" label="评论内容" min-width="280" show-overflow-tooltip />
-        <el-table-column prop="createdAt" label="评论时间" min-width="170" />
+        <el-table-column prop="score" label="爱心评分" width="90" />
+        <el-table-column prop="content" label="反馈内容" min-width="280" show-overflow-tooltip />
+        <el-table-column prop="createdAt" label="提交时间" min-width="170" />
         <el-table-column label="状态" width="120">
           <template #default="{ row }">
             <el-switch :model-value="Number(row.status)===1" @change="(v)=>toggleStatus(row, v)" />
@@ -48,7 +48,7 @@ const toggleStatus = async (row, checked) => {
 }
 
 const remove = async (id) => {
-  await ElMessageBox.confirm('确认删除该评论吗？', '提示', { type: 'warning' })
+  await ElMessageBox.confirm('确认删除这条互动反馈吗？', '提示', { type: 'warning' })
   await deleteAdminComment(id)
   ElMessage.success('删除成功')
   await load()

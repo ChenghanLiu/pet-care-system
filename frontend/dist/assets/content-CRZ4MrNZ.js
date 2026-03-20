@@ -1,0 +1,1 @@
+import{C as t}from"./index-B4DxVSj_.js";import{c as i,d as n}from"./agriTransform-BRaK7Fzg.js";const s=a=>Array.isArray(a)?a:[],o=async()=>s(await t.get("/api/banners")).map(n),c=async()=>s(await t.get("/api/notices")).map(i);export{o as a,c as g};

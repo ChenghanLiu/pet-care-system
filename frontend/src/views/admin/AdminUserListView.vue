@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrap">
-    <div class="section-title">用户管理</div>
+    <div class="section-title">爱心用户管理</div>
     <div class="card" style="padding:16px;">
       <el-table :data="users" v-loading="loading">
         <el-table-column prop="id" label="ID" width="80" />
@@ -19,7 +19,7 @@
       </el-table>
     </div>
 
-    <el-dialog v-model="visible" title="编辑用户" width="460px">
+    <el-dialog v-model="visible" title="编辑用户信息" width="460px">
       <el-form :model="form" label-width="80px">
         <el-form-item label="昵称"><el-input v-model="form.nickname" /></el-form-item>
         <el-form-item label="手机号"><el-input v-model="form.phone" /></el-form-item>

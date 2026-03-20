@@ -1,49 +1,12 @@
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
-    color: var(--text-main);
-    background:
-        radial-gradient(circle at top left, rgba(211, 167, 79, 0.18), transparent 28%),
-        linear-gradient(180deg, #f8f5ea 0%, #f2f7ec 100%);
-}
-
-a {
-    color: inherit;
-    text-decoration: none;
-}
-
-.page-wrap {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px 20px 40px;
-}
-
-.section-title {
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 18px;
-}
-
-.card {
-    border-radius: 14px;
-    background: var(--surface-panel);
-    box-shadow: var(--card-shadow);
-    border: 1px solid rgba(117, 137, 92, 0.18);
-}
-
-.el-button--primary {
-    --el-button-bg-color: var(--brand-main);
-    --el-button-border-color: var(--brand-main);
-    --el-button-hover-bg-color: var(--brand-soft);
-    --el-button-hover-border-color: var(--brand-soft);
-}
-
-.el-tag--success {
-    --el-tag-bg-color: #eef7ea;
-    --el-tag-border-color: #c5dbbc;
-    --el-tag-text-color: var(--brand-deep);
+:root {
+    --brand-deep: #8a4f3d;
+    --brand-main: #ff8a65;
+    --brand-soft: #f3a183;
+    --brand-gold: #f3bf78;
+    --surface-bg: #fff7f5;
+    --surface-panel: rgba(255, 255, 255, 0.92);
+    --text-main: #3d322f;
+    --text-secondary: #7a6862;
+    --line-color: #f3dcd7;
+    --card-shadow: 0 18px 40px rgba(170, 116, 92, 0.12);
 }

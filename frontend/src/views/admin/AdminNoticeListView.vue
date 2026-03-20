@@ -1,14 +1,14 @@
 <template>
   <div class="page-wrap">
-    <div class="section-title">农业公告与通知管理</div>
+    <div class="section-title">爱心公告管理</div>
     <div class="card" style="padding:16px;">
       <div style="margin-bottom:12px;">
-        <el-button type="primary" @click="openCreate">新增公告通知</el-button>
+        <el-button type="primary" @click="openCreate">新增爱心公告</el-button>
       </div>
       <el-table :data="notices" v-loading="loading">
         <el-table-column prop="title" label="标题" min-width="220" />
         <el-table-column label="类型" width="120">
-          <template #default="{ row }">{{ Number(row.type) === 2 ? '资讯解读' : '系统公告' }}</template>
+          <template #default="{ row }">{{ Number(row.type) === 2 ? '养宠指南' : '平台公告' }}</template>
         </el-table-column>
         <el-table-column label="状态" width="100">
           <template #default="{ row }">{{ Number(row.status) === 1 ? '发布中' : '已下线' }}</template>
@@ -16,23 +16,23 @@
         <el-table-column prop="publishTime" label="发布时间" min-width="180" />
         <el-table-column label="操作" width="180">
           <template #default="{ row }">
-            <el-button link type="primary" @click="openEdit(row)">编辑公告</el-button>
-            <el-button link type="danger" @click="remove(row)">删除公告</el-button>
+            <el-button link type="primary" @click="openEdit(row)">编辑内容</el-button>
+            <el-button link type="danger" @click="remove(row)">删除内容</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
 
-    <el-dialog v-model="visible" :title="form.id ? '编辑公告通知' : '新增公告通知'" width="640px">
+    <el-dialog v-model="visible" :title="form.id ? '编辑爱心公告' : '新增爱心公告'" width="640px">
       <el-form :model="form" label-width="88px">
-        <el-form-item label="标题"><el-input v-model="form.title" placeholder="请输入农业公告或通知标题" /></el-form-item>
+        <el-form-item label="标题"><el-input v-model="form.title" placeholder="请输入爱心公告或养宠指南标题" /></el-form-item>
         <el-form-item label="类型">
           <el-select v-model="form.type" style="width:100%">
-            <el-option :value="1" label="系统公告" />
-            <el-option :value="2" label="资讯解读" />
+            <el-option :value="1" label="平台公告" />
+            <el-option :value="2" label="养宠指南" />
           </el-select>
         </el-form-item>
-        <el-form-item label="内容"><el-input v-model="form.content" type="textarea" :rows="6" placeholder="用于填写农业公告、通知说明或资讯解读内容" /></el-form-item>
+        <el-form-item label="内容"><el-input v-model="form.content" type="textarea" :rows="6" placeholder="用于填写领养提醒、平台通知或养宠指南内容" /></el-form-item>
         <el-form-item label="发布时间"><el-date-picker v-model="form.publishTime" type="datetime" value-format="YYYY-MM-DD HH:mm:ss" style="width:100%" /></el-form-item>
         <el-form-item label="状态">
           <el-select v-model="form.status" style="width:100%">
@@ -62,9 +62,7 @@ const form = ref({ id: null, title: '', content: '', type: 1, status: 1, publish
 
 const formatPublishTime = (value) => {
   const source = String(value ?? '').trim()
-  if (!source) {
-    return ''
-  }
+  if (!source) return ''
   return source.includes('T') ? source.replace('T', ' ').slice(0, 19) : source.slice(0, 19)
 }
 
@@ -115,10 +113,10 @@ const submit = async () => {
   try {
     if (form.value.id) {
       await updateAdminNotice(form.value.id, payload)
-      ElMessage.success('公告通知已更新')
+      ElMessage.success('公告内容已更新')
     } else {
       await createAdminNotice(payload)
-      ElMessage.success('公告通知已新增')
+      ElMessage.success('公告内容已新增')
     }
     visible.value = false
     await load()
@@ -130,7 +128,7 @@ const submit = async () => {
 const remove = async (row) => {
   await ElMessageBox.confirm(`确认删除公告《${row.title || '未命名公告'}》吗？`, '提示', { type: 'warning' })
   await deleteAdminNotice(row.id)
-  ElMessage.success('公告通知已删除')
+  ElMessage.success('公告内容已删除')
   await load()
 }
 

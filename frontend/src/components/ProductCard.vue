@@ -1,13 +1,13 @@
 <template>
   <div class="card product-card" @click="goDetail">
-    <img :src="imageSrc" class="cover" alt="农业信息封面" @error="handleImageError" />
+    <img :src="imageSrc" class="cover" alt="宠物信息封面" @error="handleImageError" />
     <div class="body">
       <div class="name">{{ safeName }}</div>
       <div class="meta-row">
-        <div class="meta">关注指数 {{ product.sales || 0 }}</div>
-        <div class="badge">参考指标 {{ Number(product.price || 0).toFixed(1) }}</div>
+        <div class="meta">人气值 {{ product.sales || 0 }}</div>
+        <div class="badge">关怀指数 {{ Number(product.price || 0).toFixed(1) }}</div>
       </div>
-      <div class="summary">{{ product.description || '点击查看农业主题说明、分类归属与基础指标。' }}</div>
+      <div class="summary">{{ product.description || '点击查看宠物简介、分类标签与照护建议。' }}</div>
     </div>
   </div>
 </template>
@@ -18,9 +18,9 @@ import { useRouter } from 'vue-router'
 
 const props = defineProps({ product: { type: Object, required: true } })
 const router = useRouter()
-const fallback = '/images/agri-placeholder.png?v=phase8'
+const fallback = '/images/pet-cat-orange.png?v=pet-shell'
 const imageSrc = ref(props.product?.coverImage || fallback)
-const safeName = computed(() => props.product?.name || `农业信息 #${props.product?.id ?? '-'}`)
+const safeName = computed(() => props.product?.name || `宠物档案 #${props.product?.id ?? '-'}`)
 
 watch(
   () => props.product?.coverImage,
@@ -45,10 +45,12 @@ const goDetail = () => router.push(`/info/${props.product.id}`)
   overflow: hidden;
   transition: transform .2s ease, box-shadow .2s ease;
 }
+
 .product-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 16px 30px rgba(56, 97, 50, 0.16);
+  box-shadow: 0 16px 30px rgba(239, 127, 87, 0.18);
 }
+
 .cover {
   width: 100%;
   height: 180px;
@@ -56,14 +58,17 @@ const goDetail = () => router.push(`/info/${props.product.id}`)
   display: block;
   background: #f8f8f8;
 }
+
 .body {
   padding: 14px;
 }
+
 .name {
   font-weight: 600;
   line-height: 1.4;
   min-height: 44px;
 }
+
 .meta {
   color: var(--text-secondary);
   font-size: 13px;
@@ -80,7 +85,7 @@ const goDetail = () => router.push(`/info/${props.product.id}`)
 .badge {
   padding: 4px 10px;
   border-radius: 999px;
-  background: #edf5e7;
+  background: rgba(255, 138, 101, 0.12);
   color: var(--brand-deep);
   font-size: 12px;
   white-space: nowrap;

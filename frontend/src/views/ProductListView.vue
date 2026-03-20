@@ -2,16 +2,16 @@
   <div class="page-wrap">
     <div class="section-head">
       <div>
-        <div class="section-title">农业信息列表</div>
-        <div class="section-desc">按作物类型、专题分类和关键词快速检索平台已发布的农业信息条目。</div>
+        <div class="section-title">宠物档案列表</div>
+        <div class="section-desc">按宠物分类、标签主题和关键词快速检索平台已发布的萌宠档案与关怀信息。</div>
       </div>
     </div>
     <div class="card filter-card">
-      <el-input v-model="query.keyword" placeholder="按标题或关键词搜索农业信息" clearable style="width:260px" @change="applyFilters" />
-      <el-select v-model="query.categoryId" placeholder="一级分类" clearable style="width:180px" @change="onCategoryChange">
+      <el-input v-model="query.keyword" placeholder="按宠物名字、品种或关键词搜索" clearable style="width:260px" @change="applyFilters" />
+      <el-select v-model="query.categoryId" placeholder="宠物大类" clearable style="width:180px" @change="onCategoryChange">
         <el-option v-for="c in categories" :key="c.id" :label="c.name" :value="c.id" />
       </el-select>
-      <el-select v-model="query.subcategoryId" placeholder="二级分类" clearable style="width:180px" @change="applyFilters">
+      <el-select v-model="query.subcategoryId" placeholder="细分标签" clearable style="width:180px" @change="applyFilters">
         <el-option v-for="s in subcategories" :key="s.id" :label="s.name" :value="s.id" />
       </el-select>
       <el-button type="primary" @click="applyFilters">筛选查询</el-button>
@@ -24,14 +24,14 @@
         <ProductCard :product="item" />
         <div class="item-ops">
           <el-button size="small" plain :type="favoriteIds.has(item.id) ? 'success' : undefined" @click="toggleFavorite(item.id)">
-            {{ favoriteIds.has(item.id) ? '取消关注' : '关注动态' }}
+            {{ favoriteIds.has(item.id) ? '取消关注' : '加入关注' }}
           </el-button>
         </div>
       </el-col>
     </el-row>
 
     <div class="card empty-wrap" v-if="!list.length">
-      <el-empty description="暂无符合条件的农业信息" />
+      <el-empty description="暂无符合条件的宠物档案" />
     </div>
   </div>
 </template>
@@ -84,7 +84,7 @@ const load = async () => {
     list.value = Array.isArray(data) ? data : []
   } catch {
     list.value = []
-    loadError.value = '农业信息加载失败，请稍后重试。'
+    loadError.value = '宠物档案加载失败，请稍后重试。'
   } finally {
     loading.value = false
   }
@@ -117,7 +117,7 @@ const toggleFavorite = async (productId) => {
     favoriteIds.value = new Set(favoriteIds.value)
   } catch (e) {
     if (e?.status === 401) {
-      ElMessage.warning('请先登录后再关注信息')
+      ElMessage.warning('请先登录后再关注宠物')
       router.push(`/login?redirect=${encodeURIComponent(route.fullPath)}`)
       return
     }

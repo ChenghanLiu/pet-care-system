@@ -1,15 +1,15 @@
 <template>
   <div class="page-wrap">
-    <div class="section-title">农业专题分类管理</div>
+    <div class="section-title">宠物分类管理</div>
 
     <div class="grid-wrap">
       <div class="card panel">
         <div class="panel-head">
-          <div class="panel-title">一级专题分类</div>
-          <el-button type="primary" @click="openCategoryCreate">新增一级专题</el-button>
+          <div class="panel-title">一级宠物分类</div>
+          <el-button type="primary" @click="openCategoryCreate">新增一级分类</el-button>
         </div>
         <el-table :data="categories" v-loading="loading">
-          <el-table-column prop="name" label="专题名称" min-width="160" />
+          <el-table-column prop="name" label="分类名称" min-width="160" />
           <el-table-column prop="sort" label="排序" width="90" />
           <el-table-column label="状态" width="100">
             <template #default="{ row }">{{ Number(row.status) === 1 ? '启用' : '停用' }}</template>
@@ -25,11 +25,11 @@
 
       <div class="card panel">
         <div class="panel-head">
-          <div class="panel-title">二级专题分类</div>
-          <el-button type="primary" @click="openSubcategoryCreate">新增二级专题</el-button>
+          <div class="panel-title">二级宠物标签</div>
+          <el-button type="primary" @click="openSubcategoryCreate">新增二级标签</el-button>
         </div>
         <el-table :data="subcategories" v-loading="loading">
-          <el-table-column label="所属一级专题" min-width="160">
+          <el-table-column label="所属一级分类" min-width="160">
             <template #default="{ row }">{{ categoryName(row.categoryId) }}</template>
           </el-table-column>
           <el-table-column prop="name" label="名称" min-width="140" />
@@ -47,9 +47,9 @@
       </div>
     </div>
 
-    <el-dialog v-model="categoryVisible" :title="categoryForm.id ? '编辑一级专题' : '新增一级专题'" width="460px">
+    <el-dialog v-model="categoryVisible" :title="categoryForm.id ? '编辑一级分类' : '新增一级分类'" width="460px">
       <el-form :model="categoryForm" label-width="88px">
-        <el-form-item label="专题名称"><el-input v-model="categoryForm.name" /></el-form-item>
+        <el-form-item label="分类名称"><el-input v-model="categoryForm.name" /></el-form-item>
         <el-form-item label="排序"><el-input-number v-model="categoryForm.sort" :min="0" /></el-form-item>
         <el-form-item label="状态">
           <el-select v-model="categoryForm.status" style="width:100%">
@@ -64,14 +64,14 @@
       </template>
     </el-dialog>
 
-    <el-dialog v-model="subcategoryVisible" :title="subcategoryForm.id ? '编辑二级专题' : '新增二级专题'" width="480px">
+    <el-dialog v-model="subcategoryVisible" :title="subcategoryForm.id ? '编辑二级标签' : '新增二级标签'" width="480px">
       <el-form :model="subcategoryForm" label-width="88px">
-        <el-form-item label="所属一级专题">
+        <el-form-item label="所属一级分类">
           <el-select v-model="subcategoryForm.categoryId" style="width:100%">
             <el-option v-for="item in categories" :key="item.id" :label="item.name" :value="Number(item.id)" />
           </el-select>
         </el-form-item>
-        <el-form-item label="专题名称"><el-input v-model="subcategoryForm.name" /></el-form-item>
+        <el-form-item label="标签名称"><el-input v-model="subcategoryForm.name" placeholder="请输入二级宠物标签名称" /></el-form-item>
         <el-form-item label="排序"><el-input-number v-model="subcategoryForm.sort" :min="0" /></el-form-item>
         <el-form-item label="状态">
           <el-select v-model="subcategoryForm.status" style="width:100%">
@@ -173,13 +173,13 @@ const submitSubcategory = async () => {
   } else {
     await createAdminSubcategory(subcategoryForm.value)
   }
-  ElMessage.success('二级分类已保存')
+  ElMessage.success('二级标签已保存')
   subcategoryVisible.value = false
   await load()
 }
 
 const removeSubcategory = async (id) => {
-  await ElMessageBox.confirm('确认删除该二级分类吗？', '提示', { type: 'warning' })
+  await ElMessageBox.confirm('确认删除该二级标签吗？', '提示', { type: 'warning' })
   await deleteAdminSubcategory(id)
   ElMessage.success('删除成功')
   await load()

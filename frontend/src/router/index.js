@@ -10,6 +10,7 @@ const routes = [
         children: [
             { path: '', redirect: '/admin/dashboard' },
             { path: 'dashboard', name: 'admin-dashboard', component: () => import('../views/admin/AdminDashboardView.vue') },
+            { path: 'statistics', name: 'admin-statistics', component: () => import('../views/admin/AdminStatisticsView.vue') },
             { path: 'users', name: 'admin-users', component: () => import('../views/admin/AdminUserListView.vue') },
             { path: 'crops', name: 'admin-crops', component: () => import('../views/admin/AdminProductListView.vue'), meta: { moduleType: 'crop' } },
             { path: 'infos', name: 'admin-infos', component: () => import('../views/admin/AdminProductListView.vue'), meta: { moduleType: 'info' } },
@@ -29,7 +30,7 @@ const routes = [
             { path: 'announcements', name: 'announcements', component: () => import('../views/AnnouncementListView.vue') },
             { path: 'announcements/:id', name: 'announcement-detail', component: () => import('../views/AnnouncementDetailView.vue') },
             { path: 'profile', name: 'profile', component: () => import('../views/ProfileView.vue'), meta: { auth: true } },
-            { path: 'favorites', name: 'favorites', component: () => import('../views/FavoritesView.vue'), meta: { auth: true } },
+            { path: 'followed-items', alias: 'favorites', name: 'followed-items', component: () => import('../views/FavoritesView.vue'), meta: { auth: true } },
             { path: 'cart', redirect: '/info' },
             { path: 'checkout', redirect: '/info' },
             { path: 'orders', redirect: '/profile' },

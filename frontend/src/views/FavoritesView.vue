@@ -2,13 +2,16 @@
   <div class="page-wrap">
     <div class="section-head">
       <div>
-        <div class="section-title">我的关注信息</div>
-        <div class="section-desc">集中查看你已关注的农业信息，支持继续浏览详情或取消关注。</div>
+        <div class="section-title">我的关注萌宠</div>
+        <div class="section-desc">集中查看你已关注的宠物档案，可继续浏览详情或随时取消关注。</div>
       </div>
+      <el-button plain @click="$router.push('/info')">继续浏览萌宠档案</el-button>
     </div>
     <el-alert v-if="loadError" :title="loadError" type="warning" :closable="false" style="margin-top: 16px;" />
     <div class="card" style="padding:16px; margin-top: 16px;" v-loading="loading">
-      <el-empty v-if="!loading && !products.length" description="你暂时还没有关注农业信息，去信息列表看看吧" />
+      <el-empty v-if="!loading && !products.length" description="你暂时还没有关注萌宠，可前往档案列表查看并收藏心仪毛孩子。">
+        <el-button type="primary" @click="$router.push('/info')">前往宠物档案列表</el-button>
+      </el-empty>
       <el-row v-else :gutter="18">
         <el-col v-for="item in products" :key="item.id" :xs="24" :sm="12" :md="8" :lg="6">
           <ProductCard :product="item" />
@@ -48,16 +51,20 @@ const load = async () => {
     products.value = details.filter(Boolean)
   } catch {
     products.value = []
-    loadError.value = '关注信息加载失败，请稍后重试。'
+    loadError.value = '关注列表加载失败，请稍后重试。'
   } finally {
     loading.value = false
   }
 }
 
 const unfavorite = async (productId) => {
-  await removeFavorite(productId)
-  ElMessage.success('已取消关注')
-  await load()
+  try {
+    await removeFavorite(productId)
+    ElMessage.success('已取消关注')
+    await load()
+  } catch {
+    ElMessage.error('取消关注失败，请稍后重试。')
+  }
 }
 
 onMounted(load)

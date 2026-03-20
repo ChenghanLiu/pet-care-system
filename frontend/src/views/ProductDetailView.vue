@@ -1,7 +1,7 @@
 <template>
   <div class="page-wrap" v-loading="loading">
     <div v-if="loadError" class="card state-card">
-      <el-result icon="warning" title="信息加载失败" :sub-title="loadError">
+      <el-result icon="warning" title="宠物档案加载失败" :sub-title="loadError">
         <template #extra>
           <el-button type="primary" @click="$router.push('/info')">返回列表</el-button>
         </template>
@@ -10,62 +10,62 @@
 
     <div v-else-if="product">
       <div class="card detail-wrap">
-        <img :src="imageSrc" class="detail-cover" alt="农业信息封面" @error="handleImageError" />
+        <img :src="imageSrc" class="detail-cover" alt="宠物信息封面" @error="handleImageError" />
         <div class="detail-main">
-          <div class="info-tag">农业信息档案</div>
-          <h2>{{ product.name || `农业信息 #${product.id}` }}</h2>
+          <div class="info-tag">宠物关怀档案</div>
+          <h2>{{ product.name || `宠物档案 #${product.id}` }}</h2>
           <div class="meta-grid">
             <div class="meta-item">
-              <span>一级分类</span>
+              <span>宠物大类</span>
               <strong>{{ categoryName }}</strong>
             </div>
             <div class="meta-item">
-              <span>二级分类</span>
+              <span>细分标签</span>
               <strong>{{ subcategoryName }}</strong>
             </div>
             <div class="meta-item">
-              <span>关注指数</span>
+              <span>关注热度</span>
               <strong>{{ product.sales || 0 }}</strong>
             </div>
             <div class="meta-item">
-              <span>参考指标</span>
+              <span>亲和指数</span>
               <strong>{{ Number(product.price || 0).toFixed(2) }}</strong>
             </div>
           </div>
 
           <div class="section-grid">
             <div class="info-panel">
-              <div class="panel-title">作物概览</div>
+              <div class="panel-title">宠物概览</div>
               <p>{{ overviewText }}</p>
             </div>
             <div class="info-panel soft-panel">
-              <div class="panel-title">种植区域</div>
-              <p>{{ plantingRegionText }}</p>
+              <div class="panel-title">性格特点</div>
+              <p>{{ personalityText }}</p>
             </div>
             <div class="info-panel soft-panel">
-              <div class="panel-title">生长周期</div>
-              <p>{{ growthCycleText }}</p>
+              <div class="panel-title">照护建议</div>
+              <p>{{ careGuideText }}</p>
             </div>
             <div class="info-panel soft-panel">
-              <div class="panel-title">适宜季节</div>
-              <p>{{ seasonText }}</p>
+              <div class="panel-title">适合家庭</div>
+              <p>{{ familyFitText }}</p>
             </div>
           </div>
 
           <div class="narrative-block">
-            <div class="panel-title">内容说明</div>
-            <p class="desc">{{ product.description || '当前条目主要用于展示农业主题、分类结构与基础指标信息。' }}</p>
+            <div class="panel-title">档案说明</div>
+            <p class="desc">{{ product.description || '当前条目主要用于展示宠物档案、分类结构与基础照护信息。' }}</p>
             <div class="micro-metrics">
-                <span>资源级别：{{ reserveLevelText }}</span>
-                <span>分类专题：{{ categoryName }} / {{ subcategoryName }}</span>
-                <span>建议用途：用于首页展示、信息检索与后台维护演示</span>
+              <span>关注状态：{{ reserveLevelText }}</span>
+              <span>分类标签：{{ categoryName }} / {{ subcategoryName }}</span>
+              <span>展示建议：适合首页推荐、档案检索与后台维护演示</span>
             </div>
           </div>
 
           <div class="ops">
-            <el-button type="primary" @click="$router.push('/announcements')">查看系统公告</el-button>
+            <el-button type="primary" @click="$router.push('/announcements')">查看爱心公告</el-button>
             <el-button plain :type="isFavorite ? 'success' : undefined" @click="toggleFavorite">
-              {{ isFavorite ? '已关注该信息' : '关注此条信息' }}
+              {{ isFavorite ? '已关注该宠物' : '关注这只萌宠' }}
             </el-button>
           </div>
         </div>
@@ -86,7 +86,7 @@ const router = useRouter()
 const product = ref(null)
 const loading = ref(false)
 const loadError = ref('')
-const fallback = '/images/agri-placeholder.png?v=phase8'
+const fallback = '/images/pet-cat-orange.png?v=pet-shell'
 const imageSrc = ref(fallback)
 const isFavorite = ref(false)
 const categoryName = ref('-')
@@ -94,51 +94,54 @@ const subcategoryName = ref('-')
 
 const reserveLevelText = computed(() => {
   const stock = Number(product.value?.stock || 0)
-  if (stock >= 200) return `资源储备充足（${stock}）`
-  if (stock >= 50) return `资源储备稳定（${stock}）`
-  if (stock > 0) return `资源储备偏紧（${stock}）`
-  return '暂无储备数据'
+  if (stock >= 200) return `可优先推荐（${stock}）`
+  if (stock >= 50) return `状态稳定（${stock}）`
+  if (stock > 0) return `建议尽快跟进（${stock}）`
+  return '暂无安置数据'
 })
 
 const overviewText = computed(() => {
-  const name = product.value?.name || '当前农业信息'
-  return `${name} 归档于 ${categoryName.value} / ${subcategoryName.value} 专题，适合展示作物管理重点、阶段任务和农业信息系统中的结构化内容。`
+  const name = product.value?.name || '当前宠物档案'
+  return `${name} 归档于 ${categoryName.value} / ${subcategoryName.value} 分类，适合查看宠物基础信息、照护建议和陪伴特点。`
 })
 
-const plantingRegionText = computed(() => {
-  const regionMap = {
-    粮食作物: '建议结合平原主产区、灌区条件和土壤肥力情况进行区域化管理，突出播种密度与田间整齐度。',
-    经济作物: '建议结合丘陵茶园、特色经济作物示范区和坡地水肥条件进行展示，突出精细管护节点。',
-    果蔬作物: '建议结合果园、棚室和近郊蔬菜基地等场景进行区域化说明，突出温湿度与采收组织。',
-    农业技术: '适合结合监测点位、设备布设和巡田服务范围进行说明，突出技术支撑与信息联动。'
+const personalityText = computed(() => {
+  const personalityMap = {
+    狗狗: '多数性格外向忠诚，适合强调互动性、陪伴感和日常运动需求。',
+    猫咪: '多数独立温柔，适合突出安静陪伴、居家适应与情绪疗愈体验。',
+    兔兔: '整体气质安静细腻，适合呈现轻陪伴和规律照护的日常节奏。',
+    鸟类: '互动方式灵活，鸣叫和站杆训练都有趣味，适合喜欢观察交流的用户。'
   }
-  return regionMap[categoryName.value] || `当前条目归属 ${categoryName.value} / ${subcategoryName.value} 专题，建议结合当地土壤条件、温度区间与灌溉条件进行区域化管理和展示。`
+  return personalityMap[categoryName.value] || `当前条目归属 ${categoryName.value} / ${subcategoryName.value} 分类，可结合性格特点、互动方式与陪伴价值进行了解。`
 })
 
-const growthCycleText = computed(() => {
+const careGuideText = computed(() => {
   const attention = Number(product.value?.sales || 0)
   const stageMap = {
-    水稻种植: '可围绕育秧、分蘖、抽穗灌浆三个阶段组织展示，便于说明稻田管理和产量形成过程。',
-    玉米种植: '可围绕苗期、大喇叭口期和灌浆成熟期组织展示，便于体现追肥与抗逆管理节点。',
-    小麦种植: '可围绕返青、拔节、灌浆成熟期组织展示，适合呈现阶段性田间观察记录。',
-    大豆种植: '可围绕苗期、开花结荚和鼓粒成熟期组织展示，体现水分管理与群体调控。',
-    设施蔬菜: '可围绕育苗、定植、坐果采收三个阶段组织展示，突出棚室环境调控和茬口安排。',
-    葡萄种植: '可围绕萌芽展叶、花果管理和成熟采收阶段组织展示，体现果园精细化管护。',
-    柑橘果园: '可围绕花期、稳果期和膨果转色期组织展示，便于说明保花保果和树势调控。',
-    苹果梨类: '可围绕花前准备、幼果管理和采收着色期组织展示，突出修剪和品质提升。',
-    茶叶产业: '可围绕萌芽、采摘和采后轻修剪阶段组织展示，体现茶园季节性管理。'
+    金毛: '建议围绕日常遛弯、情绪陪伴和定期梳毛进行说明，突出其亲和稳定的家庭属性。',
+    柯基: '适合说明居家陪伴、轻运动和臀腿护理要点，突出小体型犬的管理场景。',
+    亲人: '可强调其愿意靠近人的互动特征，方便用户判断是否适合高频陪伴。',
+    布偶: '适合突出温和互动、毛发护理和稳定情绪，方便了解其居家陪伴特点。',
+    英国短毛猫: '适合说明居家安置、梳毛陪玩和环境管理等日常照护内容。',
+    幼年: '可围绕作息建立、精力释放和健康观察进行介绍，体现成长阶段特点。',
+    垂耳兔: '可说明草料喂养、安静环境和清洁频次，突出轻陪伴型宠物特征。',
+    已登记: '可重点查看其健康记录、饮食习惯和适应情况，方便后续持续关注。',
+    温顺: '适合说明抱持配合度和日常互动节奏，帮助用户建立稳定照护预期。',
+    虎皮鹦鹉: '可围绕站杆互动、鸣叫节奏和环境通风展开，体现鸟类日常特点。',
+    玄凤鹦鹉: '适合说明手喂训练、熟人识别和情绪稳定性，便于理解互动方式。',
+    活泼: '可强调其活动量、探索欲和固定互动时间的重要性。'
   }
-  return `${stageMap[subcategoryName.value] || '可按播种准备、苗期管理、中后期监测三个阶段理解该条目。'} 当前关注指数为 ${attention}，适合在演示中呈现持续跟踪类农业资料。`
+  return `${stageMap[subcategoryName.value] || '可从饮食、互动和健康观察三个方面理解该条目。'} 当前人气值为 ${attention}，适合持续关注其日常状态与陪伴需求。`
 })
 
-const seasonText = computed(() => {
-  const seasonMap = {
-    粮食作物: '以春播和秋收阶段为重点，适合结合墒情与田间管理进行说明。',
-    经济作物: '适宜在春夏生长旺季重点展示，同时关注采收期与病虫害防控。',
-    果蔬作物: '建议按春秋两季为主线展示，突出温度、水肥和设施管理要点。',
-    农业技术: '适合围绕年度生产周期组织内容，突出监测、预警与技术服务节点。'
+const familyFitText = computed(() => {
+  const familyMap = {
+    狗狗: '适合有陪伴时间、愿意日常外出活动的家庭，能够体现宠物互动价值。',
+    猫咪: '适合追求安静居家陪伴和疗愈氛围的用户，整体相处节奏更轻松自然。',
+    兔兔: '适合空间较安静、愿意规律清洁和观察饮食状态的家庭。',
+    鸟类: '适合关注互动频率、通风环境和日常作息的家庭，便于建立稳定陪伴。'
   }
-  return seasonMap[categoryName.value] || '建议结合当地气候条件，在春季播种准备与秋季采收管理阶段重点参考。'
+  return familyMap[categoryName.value] || '适合结合用户需求、空间条件与照护时间进行说明。'
 })
 
 const handleImageError = (event) => {
@@ -170,7 +173,7 @@ const toggleFavorite = async () => {
     }
   } catch (e) {
     if (e?.status === 401) {
-      ElMessage.warning('请先登录后再关注')
+      ElMessage.warning('请先登录后再关注宠物')
       router.push(`/login?redirect=${encodeURIComponent(route.fullPath)}`)
       return
     }
@@ -195,7 +198,7 @@ onMounted(async () => {
   } catch (error) {
     product.value = null
     imageSrc.value = fallback
-    loadError.value = error?.status === 404 ? '该农业信息不存在或已下线。' : '当前农业信息暂时无法查看，请稍后重试。'
+    loadError.value = error?.status === 404 ? '该宠物档案不存在或已下线。' : '当前宠物档案暂时无法查看，请稍后重试。'
   } finally {
     loading.value = false
   }
@@ -225,7 +228,7 @@ onMounted(async () => {
   display: inline-flex;
   padding: 7px 12px;
   border-radius: 999px;
-  background: #edf5e7;
+  background: rgba(255, 138, 101, 0.12);
   color: var(--brand-deep);
   font-size: 12px;
   letter-spacing: 0.08em;
@@ -241,7 +244,7 @@ onMounted(async () => {
 .meta-item {
   padding: 14px;
   border-radius: 12px;
-  background: #f6f8ef;
+  background: #fff8f2;
 }
 
 .meta-item span {
@@ -259,7 +262,7 @@ onMounted(async () => {
 .info-panel {
   padding: 18px;
   border-radius: 12px;
-  background: linear-gradient(135deg, rgba(111, 170, 91, 0.12), rgba(211, 167, 79, 0.14));
+  background: linear-gradient(135deg, rgba(255, 138, 101, 0.12), rgba(243, 191, 120, 0.18));
 }
 
 .section-grid {
@@ -270,7 +273,7 @@ onMounted(async () => {
 }
 
 .soft-panel {
-  background: #f7f8f1;
+  background: #fffdf9;
 }
 
 .panel-title {
@@ -295,8 +298,8 @@ onMounted(async () => {
   margin-top: 18px;
   padding: 18px;
   border-radius: 12px;
-  border: 1px solid rgba(111, 170, 91, 0.18);
-  background: #fffdf7;
+  border: 1px solid rgba(239, 127, 87, 0.14);
+  background: #fffdf9;
 }
 
 .micro-metrics {
@@ -309,7 +312,7 @@ onMounted(async () => {
 .micro-metrics span {
   padding: 8px 12px;
   border-radius: 999px;
-  background: #f3f6ea;
+  background: rgba(255, 138, 101, 0.1);
   color: var(--brand-deep);
   font-size: 13px;
 }
@@ -321,11 +324,8 @@ onMounted(async () => {
   margin-top: 18px;
 }
 
-@media (max-width: 900px) {
-  .detail-wrap {
-    grid-template-columns: 1fr;
-  }
-
+@media (max-width: 960px) {
+  .detail-wrap,
   .section-grid {
     grid-template-columns: 1fr;
   }

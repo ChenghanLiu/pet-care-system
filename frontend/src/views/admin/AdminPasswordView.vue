@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrap">
-    <div class="section-title">修改管理员密码</div>
+    <div class="section-title">安全设置</div>
     <div class="card" style="padding:16px;max-width:560px;">
       <el-form :model="form" label-width="100px">
         <el-form-item label="旧密码">

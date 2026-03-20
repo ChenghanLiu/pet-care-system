@@ -1,7 +1,7 @@
 <template>
   <div class="page-wrap" v-loading="loading">
     <div class="back-row">
-      <el-button plain @click="goBack">返回公告列表</el-button>
+      <el-button plain @click="goBack">返回爱心公告</el-button>
     </div>
 
     <div v-if="loadError" class="card state-card">
@@ -28,7 +28,7 @@
             <strong>{{ formatTime(notice.updatedAt || notice.publishTime || notice.createdAt) }}</strong>
           </div>
           <div class="meta-item">
-            <span>公告编号</span>
+            <span>内容编号</span>
             <strong>{{ notice.id || '-' }}</strong>
           </div>
         </div>
@@ -37,7 +37,7 @@
       <el-divider />
 
       <div class="content-wrap">
-        <div class="section-title">公告内容</div>
+        <div class="section-title">详细内容</div>
         <p class="content-text">{{ safeContent }}</p>
       </div>
     </article>
@@ -57,9 +57,8 @@ const loadError = ref('')
 const notice = ref(null)
 
 const formatTime = (value) => value ? dayjs(value).format('YYYY-MM-DD HH:mm') : '暂无时间信息'
-
-const noticeTypeText = computed(() => Number(notice.value?.type) === 2 ? '资讯解读' : '系统公告')
-const safeContent = computed(() => notice.value?.content || '当前公告暂无详细内容，请返回列表查看其他公告。')
+const noticeTypeText = computed(() => Number(notice.value?.type) === 2 ? '养宠指南' : '平台公告')
+const safeContent = computed(() => notice.value?.content || '当前内容暂无详细说明，请返回列表查看其他爱心公告。')
 
 const goBack = () => {
   if (window.history.length > 1) {
@@ -80,7 +79,7 @@ const loadNotice = async () => {
     const matched = (Array.isArray(notices) ? notices : []).find((item) => Number(item.id) === id)
 
     if (!matched) {
-      loadError.value = '该公告不存在、已下线，或当前无法访问。'
+      loadError.value = '该内容不存在、已下线，或当前无法访问。'
       return
     }
 
@@ -128,7 +127,7 @@ watch(() => route.params.id, loadNotice)
 .meta-item {
   padding: 16px;
   border-radius: 12px;
-  background: #f6f8ef;
+  background: #fff8f2;
 }
 
 .meta-item span {
@@ -152,7 +151,7 @@ watch(() => route.params.id, loadNotice)
 
 .content-text {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--text-main);
   line-height: 1.9;
   white-space: pre-line;
   word-break: break-word;

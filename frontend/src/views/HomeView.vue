@@ -4,14 +4,14 @@
       <div class="hero-main card">
         <el-carousel height="340px" indicator-position="outside">
           <el-carousel-item v-for="item in slides" :key="item.title">
-            <div class="slide" :style="{ backgroundImage: `url(${item.imageUrl})` }">
+            <div class="slide" :style="{ backgroundImage: `url(${item.imageUrl})` }" role="button" tabindex="0" @click="openBannerTarget(item)" @keyup.enter="openBannerTarget(item)">
               <div class="overlay">
-                <div class="eyebrow">农业信息管理系统</div>
+                <div class="eyebrow">宠物信息平台</div>
                 <h1>{{ item.title }}</h1>
                 <p>{{ item.summary }}</p>
                 <div class="hero-actions">
-                  <el-button type="primary" @click="$router.push('/info')">查看农业信息</el-button>
-                  <el-button plain @click="$router.push('/announcements')">浏览系统公告</el-button>
+                  <el-button type="primary" @click="$router.push('/info')">查看宠物信息</el-button>
+                  <el-button plain @click="$router.push('/announcements')">浏览爱心公告</el-button>
                 </div>
               </div>
             </div>
@@ -19,7 +19,7 @@
         </el-carousel>
       </div>
       <div class="hero-side card">
-        <div class="side-title">信息导航</div>
+        <div class="side-title">萌宠分类导航</div>
         <template v-if="categories.length">
           <router-link
             v-for="category in categories"
@@ -27,17 +27,17 @@
             class="category-link"
             :to="`/info?categoryId=${category.id}`"
           >
-            <span>{{ category.name || `专题分类 #${category.id}` }}</span>
-            <span>进入专题</span>
+            <span>{{ category.name || `宠物分类 #${category.id}` }}</span>
+            <span>进入专区</span>
           </router-link>
         </template>
-        <el-empty v-else description="暂无专题分类" />
+        <el-empty v-else description="暂无宠物分类" />
       </div>
     </section>
 
     <section class="section-block">
-      <div class="section-title">推荐农业信息</div>
-      <div class="section-desc">集中展示粮食作物、果园管理、设施栽培和农技服务等适合答辩演示的核心条目。</div>
+      <div class="section-title">推荐萌宠档案</div>
+      <div class="section-desc">集中展示热门宠物档案、分类信息和平台公告，方便用户快速浏览近期关注内容。</div>
       <el-row :gutter="18" style="margin-top: 18px;">
         <el-col v-for="item in recommendList" :key="item.id" :xs="24" :sm="12" :md="8" :lg="6">
           <ProductCard :product="item" />
@@ -48,7 +48,7 @@
     <section class="section-block content-grid">
       <div class="card notice-panel">
         <div class="panel-head">
-          <div class="section-title panel-title">最新公告</div>
+          <div class="section-title panel-title">最新爱心动态</div>
           <router-link class="more-link" to="/announcements">查看全部</router-link>
         </div>
         <div v-if="notices.length" class="notice-list">
@@ -57,15 +57,15 @@
             <p>{{ item.content }}</p>
           </article>
         </div>
-        <el-empty v-else description="暂无公告" />
+        <el-empty v-else description="暂未发布动态" />
       </div>
 
       <div class="card spotlight-panel">
-        <div class="section-title panel-title">平台定位</div>
+        <div class="section-title panel-title">平台特色</div>
         <ul class="spotlight-list">
-          <li>面向普通用户提供作物档案浏览、条件筛选、详情查看与公告查阅。</li>
-          <li>首页重点突出粮食作物、果园管理、设施栽培和农技服务等农业信息条目。</li>
-          <li>后台统一维护作物信息、分类专题、首页图文和公告内容，保证答辩演示连贯性。</li>
+          <li>面向普通用户提供宠物档案浏览、条件筛选、详情查看与公告查阅。</li>
+          <li>首页重点突出狗狗、猫咪、小宠和爱心服务四类主题内容。</li>
+          <li>后台统一维护宠物资料、分类标签、首页轮播和平台公告，保证信息发布清晰一致。</li>
         </ul>
       </div>
     </section>
@@ -74,31 +74,52 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { getCategories, getRecommendProducts } from '../api/product'
 import { getPublicBanners, getPublicNotices } from '../api/content'
 import ProductCard from '../components/ProductCard.vue'
 
+const router = useRouter()
 const recommendList = ref([])
 const categories = ref([])
 const notices = ref([])
 const slides = ref([])
 
+const openBannerTarget = (item) => {
+  const target = String(item?.target || '').trim()
+  if (!target) return
+  if (/^\/front\/product\/detail\?id=\d+$/i.test(target)) {
+    const id = target.match(/id=(\d+)/i)?.[1]
+    if (id) {
+      router.push(`/info/${id}`)
+      return
+    }
+  }
+  if (target.startsWith('/products/')) {
+    router.push(target.replace('/products/', '/info/'))
+    return
+  }
+  if (target.startsWith('/info/') || target.startsWith('/announcements')) {
+    router.push(target)
+  }
+}
+
 const defaultSlides = [
   {
-    title: '聚合作物档案与田间管理信息',
-    summary: '围绕粮食作物、果园管护、设施栽培和农业公告，构建清晰可演示的农业信息管理首页。',
-    imageUrl: '/images/agri-banner-1.png?v=phase8'
+    title: '遇见有缘毛孩子，开启温暖陪伴',
+    summary: '围绕宠物档案、领养信息、平台公告和后台维护，构建清晰完整的宠物信息平台首页。',
+    imageUrl: '/images/agri-banner-1.png?v=pet-shell'
   },
   {
-    title: '支持分类浏览与专题检索',
-    summary: '继续沿用轮播、卡片、分类导航与详情展示方式，强化作物专题表达与页面统一性。',
-    imageUrl: '/images/agri-banner-2.png?v=phase8'
+    title: '支持分类浏览与多维筛选',
+    summary: '支持按分类查看宠物档案，并结合标签与说明快速了解不同宠物的习性特点。',
+    imageUrl: '/images/agri-banner-2.png?v=pet-shell'
   },
   {
-    title: '服务农业信息管理场景',
-    summary: '适合毕业设计答辩演示，包括作物信息维护、公告发布、分类管理与用户中心。',
-    imageUrl: '/images/agri-banner-3.png?v=phase8'
+    title: '让宠物信息更清晰可查',
+    summary: '覆盖宠物信息维护、平台公告发布、分类管理与用户中心等完整业务流程。',
+    imageUrl: '/images/agri-banner-3.png?v=pet-shell'
   }
 ]
 
@@ -123,9 +144,10 @@ onMounted(async () => {
     const safeBanners = (Array.isArray(bannerList.value) ? bannerList.value : []).filter((item) => item?.imageUrl)
     slides.value = safeBanners.length
       ? safeBanners.map((item) => ({
-          title: item.title || '农业主题轮播',
-          summary: item.linkUrl || '后台可维护的农业专题展示内容。',
-          imageUrl: item.imageUrl
+          title: item.title || '宠物主题轮播',
+          summary: item.summary || item.subtitle || item.description || '欢迎查看宠物档案、平台公告与温暖陪伴故事。',
+          imageUrl: item.imageUrl,
+          target: item.linkUrl
         }))
       : defaultSlides
   } else {
@@ -161,7 +183,7 @@ onMounted(async () => {
 .overlay {
   height: 100%;
   padding: 38px;
-  background: linear-gradient(100deg, rgba(30, 51, 21, 0.72), rgba(30, 51, 21, 0.16));
+  background: linear-gradient(100deg, rgba(45, 91, 102, 0.82), rgba(45, 91, 102, 0.16));
 }
 
 .eyebrow {
@@ -169,7 +191,7 @@ onMounted(async () => {
   margin-bottom: 14px;
   padding: 6px 10px;
   border-radius: 999px;
-  color: #f3f2e4;
+  color: #fdf8f5;
   background: rgba(255, 255, 255, 0.16);
   font-size: 12px;
   letter-spacing: 0.12em;

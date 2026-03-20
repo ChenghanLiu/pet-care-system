@@ -27,14 +27,14 @@
         <el-table-column label="一级分类" min-width="120">
           <template #default="{ row }">{{ getCategoryName(row.categoryId) }}</template>
         </el-table-column>
-        <el-table-column label="二级分类" min-width="140">
+        <el-table-column label="二级标签" min-width="140">
           <template #default="{ row }">{{ getSubcategoryName(row.subcategoryId) }}</template>
         </el-table-column>
-        <el-table-column prop="price" label="参考指标" width="120">
+        <el-table-column prop="price" label="亲和指数" width="120">
           <template #default="{ row }">{{ Number(row.price || 0).toFixed(2) }}</template>
         </el-table-column>
-        <el-table-column prop="stock" label="资源级别" width="100" />
-        <el-table-column prop="sales" label="关注指数" width="100" />
+        <el-table-column prop="stock" label="安置进度" width="100" />
+        <el-table-column prop="sales" label="关注热度" width="100" />
         <el-table-column prop="status" label="发布状态" width="120">
           <template #default="{ row }">
             <el-switch :model-value="Number(row.status)===1" @change="(v)=>toggleStatus(row, v)" />
@@ -57,7 +57,7 @@
             <el-option v-for="item in categories" :key="item.id" :label="item.name" :value="Number(item.id)" />
           </el-select>
         </el-form-item>
-        <el-form-item label="二级分类">
+        <el-form-item label="二级标签">
           <el-select v-model="form.subcategoryId" style="width:100%">
             <el-option v-for="item in subcategoriesByCategory" :key="item.id" :label="item.name" :value="Number(item.id)" />
           </el-select>
@@ -87,19 +87,19 @@
           </el-image>
           <div v-else class="image-fallback image-preview-fallback">请输入图片 URL</div>
         </el-form-item>
-        <el-form-item label="参考指标"><el-input-number v-model="form.price" :min="0" :precision="2" /></el-form-item>
-        <el-form-item label="资源级别"><el-input-number v-model="form.stock" :min="0" /></el-form-item>
-        <el-form-item label="关注指数"><el-input-number v-model="form.sales" :min="0" /></el-form-item>
-        <el-form-item label="内容简介"><el-input v-model="form.description" type="textarea" :rows="3" /></el-form-item>
+        <el-form-item label="亲和指数"><el-input-number v-model="form.price" :min="0" :precision="2" /></el-form-item>
+        <el-form-item label="安置进度"><el-input-number v-model="form.stock" :min="0" /></el-form-item>
+        <el-form-item label="关注热度"><el-input-number v-model="form.sales" :min="0" /></el-form-item>
+        <el-form-item label="档案简介"><el-input v-model="form.description" type="textarea" :rows="3" placeholder="请输入宠物特点、照护建议或展示说明" /></el-form-item>
         <el-form-item label="发布状态">
           <el-select v-model="form.status" style="width:100%">
-            <el-option :value="1" label="发布" />
-            <el-option :value="0" label="下线" />
+            <el-option :value="1" label="展示中" />
+            <el-option :value="0" label="已隐藏" />
           </el-select>
         </el-form-item>
         <el-form-item label="首页推荐">
           <el-select v-model="form.isRecommend" style="width:100%">
-            <el-option :value="1" label="专题展示" />
+            <el-option :value="1" label="首页推荐" />
             <el-option :value="0" label="普通展示" />
           </el-select>
         </el-form-item>
@@ -138,12 +138,12 @@ const uploading = ref(false)
 const form = ref({ id: null, name: '', categoryId: 1, subcategoryId: 1, coverImage: '', price: 0, stock: 0, sales: 0, description: '', status: 1, isRecommend: 0 })
 
 const moduleType = computed(() => route.meta.moduleType || 'info')
-const pageTitle = computed(() => moduleType.value === 'crop' ? '作物信息管理' : '农业信息管理')
-const singularTitle = computed(() => moduleType.value === 'crop' ? '作物信息' : '农业信息')
+const pageTitle = computed(() => moduleType.value === 'crop' ? '领养档案管理' : '宠物资料管理')
+const singularTitle = computed(() => moduleType.value === 'crop' ? '领养档案' : '宠物资料')
 const pageDesc = computed(() => moduleType.value === 'crop'
-  ? '维护重点作物资料、农业指标、封面配图与发布状态，适合作为后台演示主界面。'
-  : '维护农业信息条目、分类归属、说明内容与首页专题展示，不调整底层数据结构。')
-const nameLabel = computed(() => moduleType.value === 'crop' ? '作物名称' : '信息标题')
+  ? '维护待领养宠物档案、封面配图、安置进度与展示状态，适合作为后台演示主界面。'
+  : '维护宠物资料条目、分类归属、档案简介与首页推荐展示，不调整底层数据结构。')
+const nameLabel = computed(() => moduleType.value === 'crop' ? '档案名称' : '宠物名称')
 
 const subcategoriesByCategory = computed(() => {
   return subcategories.value.filter((item) => Number(item.categoryId) === Number(form.value.categoryId))
@@ -239,7 +239,7 @@ const submit = async () => {
     return
   }
   if (!form.value.categoryId || !form.value.subcategoryId) {
-    ElMessage.warning('请选择农业信息所属分类')
+    ElMessage.warning('请选择宠物资料所属分类')
     return
   }
 

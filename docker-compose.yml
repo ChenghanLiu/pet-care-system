@@ -1,11 +1,11 @@
 services:
   mysql:
-    image: mysql:8.0
-    container_name: agricultural_info_mysql
+    image: docker.1ms.run/mysql:8.0
+    container_name: pet_system_mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: wine_shop
+      MYSQL_DATABASE: pet_system
     ports:
       - "3306:3306"
     volumes:
@@ -15,6 +15,44 @@ services:
     command:
       --character-set-server=utf8mb4
       --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pet_system_backend
+    restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SERVER_PORT: 8080
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: pet_system
+      DB_USERNAME: root
+      DB_PASSWORD: root
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./uploads:/app/uploads
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: pet_system_frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
 
 volumes:
   mysql_data:

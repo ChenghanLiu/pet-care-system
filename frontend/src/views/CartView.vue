@@ -1,36 +1,36 @@
 <template>
   <div class="page-wrap">
-    <div class="section-title">购物车</div>
+    <div class="section-title">暂存清单</div>
     <div class="card" style="padding:16px;">
-      <el-empty v-if="!items.length" description="购物车空空如也，快去选购吧" />
+      <el-empty v-if="!items.length" description="暂存清单为空，可返回宠物档案页继续浏览" />
       <template v-else>
         <el-table :data="items" v-loading="loading">
-          <el-table-column label="商品" min-width="260">
+          <el-table-column label="宠物档案" min-width="260">
             <template #default="{ row }">
               <div class="product-cell">
                 <img :src="detailMap[row.productId]?.coverImage || fallback" class="thumb" />
                 <div>
-                  <div class="name">{{ detailMap[row.productId]?.name || `商品#${row.productId}` }}</div>
+                  <div class="name">{{ detailMap[row.productId]?.name || `档案#${row.productId}` }}</div>
                   <div class="sub">ID: {{ row.productId }}</div>
                 </div>
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="单价" width="120">
-            <template #default="{ row }">¥{{ Number(detailMap[row.productId]?.price || 0).toFixed(2) }}</template>
+          <el-table-column label="亲和指数" width="120">
+            <template #default="{ row }">{{ Number(detailMap[row.productId]?.price || 0).toFixed(2) }}</template>
           </el-table-column>
-          <el-table-column label="数量" width="170">
+          <el-table-column label="关注份数" width="170">
             <template #default="{ row }">
               <el-input-number :model-value="row.quantity" :min="1" @change="(val)=>updateQty(row,val)" />
             </template>
           </el-table-column>
-          <el-table-column label="选中" width="120">
+          <el-table-column label="保留" width="120">
             <template #default="{ row }">
               <el-switch :model-value="row.selected===1" @change="(v)=>toggleSelected(row,v)" />
             </template>
           </el-table-column>
-          <el-table-column label="小计" width="120">
-            <template #default="{ row }">¥{{ Number((detailMap[row.productId]?.price || 0) * (row.quantity || 0)).toFixed(2) }}</template>
+          <el-table-column label="合计指数" width="120">
+            <template #default="{ row }">{{ Number((detailMap[row.productId]?.price || 0) * (row.quantity || 0)).toFixed(2) }}</template>
           </el-table-column>
           <el-table-column label="操作" width="140">
             <template #default="{ row }">
@@ -39,8 +39,8 @@
           </el-table-column>
         </el-table>
         <div class="summary">
-          <span>已选 {{ selectedCount }} 件商品，合计 <b>¥{{ selectedTotal.toFixed(2) }}</b></span>
-          <el-button type="primary" :disabled="selectedCount===0" @click="$router.push('/checkout')">去结算</el-button>
+          <span>已保留 {{ selectedCount }} 条记录，合计指数 <b>{{ selectedTotal.toFixed(2) }}</b></span>
+          <el-button type="primary" :disabled="selectedCount===0" @click="$router.push('/checkout')">继续填写申请</el-button>
         </div>
       </template>
     </div>
@@ -56,12 +56,12 @@ import { getProductDetail } from '../api/product'
 const loading = ref(false)
 const items = ref([])
 const detailMap = ref({})
-const fallback = '/images/agri-placeholder.png?v=phase8'
+const fallback = '/images/agri-placeholder.png?v=pet-shell'
 
 const selectedCount = computed(() => items.value.filter((i) => i.selected === 1).length)
 const selectedTotal = computed(() => items.value
-    .filter((i) => i.selected === 1)
-    .reduce((sum, i) => sum + Number(detailMap.value[i.productId]?.price || 0) * Number(i.quantity || 0), 0))
+  .filter((i) => i.selected === 1)
+  .reduce((sum, i) => sum + Number(detailMap.value[i.productId]?.price || 0) * Number(i.quantity || 0), 0))
 
 const loadDetails = async () => {
   const ids = [...new Set(items.value.map((i) => i.productId))]
@@ -109,17 +109,26 @@ onMounted(load)
   justify-content: space-between;
   align-items: center;
 }
+
 .product-cell {
   display: flex;
   align-items: center;
   gap: 10px;
 }
+
 .thumb {
   width: 52px;
   height: 52px;
   object-fit: cover;
   border-radius: 8px;
 }
-.name { font-weight: 600; }
-.sub { font-size: 12px; color: #999; }
+
+.name {
+  font-weight: 600;
+}
+
+.sub {
+  font-size: 12px;
+  color: #999;
+}
 </style>

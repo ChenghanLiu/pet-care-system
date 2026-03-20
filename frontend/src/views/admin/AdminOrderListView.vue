@@ -1,17 +1,17 @@
 <template>
   <div class="page-wrap">
-    <div class="section-title">订单管理</div>
+    <div class="section-title">服务记录管理</div>
     <div class="card" style="padding:16px;">
       <el-table :data="orders" v-loading="loading">
-        <el-table-column prop="orderNo" label="订单号" min-width="180" />
-        <el-table-column prop="payAmount" label="金额" width="120">
-          <template #default="{ row }">¥{{ Number(row.payAmount || 0).toFixed(2) }}</template>
+        <el-table-column prop="orderNo" label="记录编号" min-width="180" />
+        <el-table-column prop="payAmount" label="申请指数" width="120">
+          <template #default="{ row }">{{ Number(row.payAmount || 0).toFixed(2) }}</template>
         </el-table-column>
         <el-table-column prop="status" label="状态" width="100" />
         <el-table-column label="操作" width="180">
           <template #default="{ row }">
-            <el-button v-if="row.status===1" link type="primary" @click="deliver(row.id)">发货</el-button>
-            <el-button v-if="row.status===5" link type="danger" @click="refund(row.id)">退款</el-button>
+            <el-button v-if="row.status===1" link type="primary" @click="deliver(row.id)">标记跟进</el-button>
+            <el-button v-if="row.status===5" link type="danger" @click="refund(row.id)">关闭记录</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -38,13 +38,13 @@ const load = async () => {
 
 const deliver = async (id) => {
   await deliverAdminOrder(id)
-  ElMessage.success('已发货')
+  ElMessage.success('已标记为跟进中')
   await load()
 }
 
 const refund = async (id) => {
   await refundAdminOrder(id)
-  ElMessage.success('已退款')
+  ElMessage.success('记录已关闭')
   await load()
 }
 
